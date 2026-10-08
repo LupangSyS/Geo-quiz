@@ -1,0 +1,36 @@
+/* Multiplayer, lobby and account additions */
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);max-width:min(92vw,460px);padding:12px 16px;border-radius:12px;background:var(--ink);color:var(--bg);font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:20}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.gbadge{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--primary);color:var(--pink);font-size:.7rem;font-weight:800}
+.guest{margin-top:16px}
+.code{font-family:"Bricolage Grotesque",sans-serif;letter-spacing:.14em;color:var(--primary)}
+code{background:var(--bg);padding:2px 6px;border-radius:6px;font-size:.9em}
+.share{margin-top:16px;text-align:center}
+.qrbox{width:min(220px,62vw);margin:0 auto;border-radius:14px;overflow:hidden;box-shadow:0 0 0 1.5px var(--line)}
+.qrbox svg{display:block;width:100%;height:auto}
+.linkline{margin-top:6px;font-size:.82rem;color:var(--muted);word-break:break-all}
+.prow{display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-top:1px solid var(--line);min-height:56px}
+.board>.prow:first-child,.team>.prow:first-of-type{border-top:0}
+.prow .nm{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prow .nm small{display:block;font-weight:400;color:var(--muted)}
+.teams{display:grid;gap:12px;margin-top:12px}
+@media (min-width:520px){.teams{grid-template-columns:1fr 1fr}}
+.team,.mteam{background:var(--paper);border-radius:14px;padding:12px;box-shadow:var(--shadow);border-top:6px solid var(--s2)}
+.tA{border-top-color:var(--s2)}.tB{border-top-color:var(--s5)}
+.tag{padding:4px 10px;border-radius:999px;font-size:.8rem;font-weight:700;background:var(--bg)}
+.tag.tA{box-shadow:inset 0 0 0 2px var(--s2)}.tag.tB{box-shadow:inset 0 0 0 2px var(--s5)}
+.mboard{display:grid;gap:8px;margin-top:10px}
+.mrow{display:grid;grid-template-columns:30px 1fr auto 20px 44px;gap:8px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--paper)}
+.mrow.me{box-shadow:inset 0 0 0 2px var(--primary)}
+.mrow.out{opacity:.55}
+.mrow .nm{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mrow .lv{font-size:.8rem;white-space:nowrap}
+.mrow .tk{color:var(--ok);font-weight:800;text-align:center}
+.mrow .sc{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;text-align:right}
+.av.sm{width:28px;height:28px;font-size:.95rem}
+.mteam{margin-top:8px}
+.mteam .mrow{background:var(--bg);margin-top:6px}
+.mteams{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.mteams .mteam{display:flex;flex-direction:column;gap:2px;text-align:center}
+.mteams .big{font-size:2.4rem}
+.results .mteams .mteam{background:var(--bg)}

@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    // Guests use anonymous auth. Google accounts have any other sign-in provider.
+    function isGoogle() { return signedIn() && request.auth.token.firebase.sign_in_provider != 'anonymous'; }
+
+    // Private progress. Google accounts only, and only your own document.
+    match /users/{uid} {
+      allow read, write: if isGoogle() && request.auth.uid == uid;
+    }
+
+    // Public leaderboard. Anyone can read. You can only write your own entry, and only with Google.
+    match /leaderboard/{uid} {
+      allow read: if true;
+      allow create, update: if isGoogle() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['name','avatar','xp','level','bestSurvival','wins','stars','accuracy','updatedAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 18
+        && request.resource.data.xp is number && request.resource.data.xp >= 0 && request.resource.data.xp < 100000000;
+      allow delete: if isGoogle() && request.auth.uid == uid;
+    }
+
+    // Game rooms. Guests and Google users can both play.
+    match /rooms/{code} {
+      function isMember() { return exists(/databases/$(database)/documents/rooms/$(code)/players/$(request.auth.uid)); }
+
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.hostId == request.auth.uid
+        && request.resource.data.status == 'lobby'
+        && request.resource.data.mode in ['duel', 'team', 'death'];
+      // The host can change anything (start the game). Other players can only advance the question or finish the game.
+      allow update: if signedIn() && (
+        resource.data.hostId == request.auth.uid
+        || (isMember() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'qIndex', 'qStartedAt', 'finishedAt']))
+      );
+      allow delete: if signedIn() && resource.data.hostId == request.auth.uid;
+
+      match /players/{uid} {
+        allow read: if signedIn();
+        // You can only add yourself, and only while the room is still in the lobby.
+        allow create: if signedIn() && request.auth.uid == uid
+          && get(/databases/$(database)/documents/rooms/$(code)).data.status == 'lobby'
+          && request.resource.data.name is string && request.resource.data.name.size() <= 18;
+        allow update: if signedIn() && request.auth.uid == uid;
+        // Leave the room, or the host removes you.
+        allow delete: if signedIn() && (request.auth.uid == uid
+          || get(/databases/$(database)/documents/rooms/$(code)).data.hostId == request.auth.uid);
+      }
+    }
+  }
+}
