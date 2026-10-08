@@ -1,0 +1,12 @@
+{
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node tests/rooms.test.js && node tests/solo.test.js && node tests/e2e.test.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "jsdom": "^24.1.3"
+  },
+  "name": "strata-geology-quiz"
+}

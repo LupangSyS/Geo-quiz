@@ -1,0 +1,8 @@
+{
+  "firestore": { "rules": "firestore.rules", "indexes": "firestore.indexes.json" },
+  "hosting": {
+    "public": ".",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "tests/**", "package*.json", "README.md", "firestore.*"],
+    "headers": [{ "source": "**/*.@(js|css)", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }]
+  }
+}
